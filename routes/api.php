@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AssignUserController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\ProjectController;
 use Illuminate\Http\Request;
@@ -23,12 +24,14 @@ Route::controller(AuthController::class)->group(function () {
 });
 
 Route::middleware('auth:api')->group(function () {
-    Route::prefix('/project')->group(function () {
+    Route::prefix('/projects')->group(function () {
         Route::post('/create', [ProjectController::class, 'create']);
-        Route::get('/{id}', [ProjectController::class, 'get'])->whereNumber('id');
+        Route::get('/{project}', [ProjectController::class, 'get'])->whereNumber('project');
         Route::get('/', [ProjectController::class, 'getAll']);
-        Route::put('/{id}', [ProjectController::class, 'update'])->whereNumber('id');
-        Route::delete('/{id}', [ProjectController::class, 'delete'])->whereNumber('id');
-        Route::post('/assign', [ProjectController::class, 'assignUser']);
+        Route::put('/{project}', [ProjectController::class, 'update'])->whereNumber('project');
+        Route::delete('/{project}', [ProjectController::class, 'delete'])->whereNumber('project');
+
+        Route::post('/{project}/assign', [AssignUserController::class, 'assignUser'])->whereNumber(['project', 'user']);
+        Route::post('/{project}/remove/{user}', [AssignUserController::class, 'removeUser'])->whereNumber(['project', 'user']);
     });
 });

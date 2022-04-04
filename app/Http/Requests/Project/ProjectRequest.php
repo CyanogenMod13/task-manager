@@ -4,6 +4,9 @@ namespace App\Http\Requests\Project;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @property string name
+ */
 class ProjectRequest extends FormRequest
 {
     public static function rules()

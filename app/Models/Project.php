@@ -20,12 +20,12 @@ class Project extends Model
         $list->save();
     }
 
-    public function assignUser(User $user, UserRole $role = UserRole::ADMIN_ROLE): AssignedUser
+    public function assignUser(int $user_id, bool $is_admin = false): AssignedUser
     {
         $assignedUser = new AssignedUser();
         $assignedUser->project_id = $this->id;
-        $assignedUser->user_id = $user->id;
-        $assignedUser->setRole($role);
+        $assignedUser->user_id = $user_id;
+        $assignedUser->is_admin = $is_admin;
         $assignedUser->save();
         return $assignedUser;
     }

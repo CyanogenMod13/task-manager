@@ -20,7 +20,7 @@ return new class extends Migration
         });
 
         Schema::table('tasks', function (Blueprint $table) {
-            $table->foreignId('list_id')->references('id')->on('task_lists');
+            $table->foreignId('task_list_id')->references('id')->on('task_lists');
         });
     }
 

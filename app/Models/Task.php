@@ -34,10 +34,5 @@ class Task extends Model
     {
         return $this->belongsTo(TaskList::class);
     }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
 }
 

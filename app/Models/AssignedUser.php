@@ -8,13 +8,8 @@ class AssignedUser extends Model
 {
     public $timestamps = false;
 
-    public function setRole(UserRole $role)
+    public function isAdmin(): bool
     {
-        $this->role = $role->value;
-    }
-
-    public function getRole(): UserRole
-    {
-        return UserRole::from($this->role);
+        return $this->is_admin;
     }
 }
