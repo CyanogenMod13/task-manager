@@ -11,12 +11,9 @@ class AssignUserController extends Controller
 {
     public function assignUser(int $project_id, ProjectAssignUserRequest $request)
     {
-        if (!Gate::allows('configure-project', $project_id)) {
-            abort(403);
-        }
         $request->validated();
         if ($assignedUser = AssignedUser::where(['project_id' => $project_id, 'user_id' => $request->user_id])->first()) {
-            $assignedUser->is_admin = $request->is_admin;
+            $assignedUser->is_admin = (bool) $request->is_admin;
             if ($assignedUser->save()) {
                 return $assignedUser;
             } else {

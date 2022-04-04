@@ -2,15 +2,21 @@
 
 namespace App\Http\Requests\Project;
 
+use Gate;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * @property int user_id
- * @property bool is_admin
+ * @property bool|null is_admin
  */
 class ProjectAssignUserRequest extends FormRequest
 {
-    public static function rules()
+    public function authorize()
+    {
+        return Gate::allows('configure-project', $this->route('project'));
+    }
+
+    public function rules()
     {
         return [
             'user_id' => 'integer|required|exists:users,id',

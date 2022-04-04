@@ -31,7 +31,7 @@ Route::middleware('auth:api')->group(function () {
         Route::put('/{project}', [ProjectController::class, 'update'])->whereNumber('project');
         Route::delete('/{project}', [ProjectController::class, 'delete'])->whereNumber('project');
 
-        Route::post('/{project}/assign', [AssignUserController::class, 'assignUser'])->whereNumber(['project', 'user']);
+        Route::post('/{project}/assign', [AssignUserController::class, 'assignUser'])->whereNumber('project');
         Route::post('/{project}/remove/{user}', [AssignUserController::class, 'removeUser'])->whereNumber(['project', 'user']);
     });
 });
