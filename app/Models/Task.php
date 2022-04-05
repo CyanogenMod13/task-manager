@@ -9,14 +9,19 @@ class Task extends Model
 {
     use HasFactory;
 
+    public const PRIORITY_LOW = 'low';
+    public const PRIORITY_NORMAL = 'normal';
+    public const PRIORITY_HIGH = 'high';
+    public const PRIORITY_CRITICAL = 'critical';
+
     public function assignUser(User $user)
     {
         $this->executor_id = $user->id;
     }
 
-    public function setPriority(TaskPriority $priority)
+    public function setPriority(string $priority)
     {
-        $this->priority = $priority->value;
+        $this->priority = $priority;
     }
 
     public function setEstimate(mixed $start, mixed $end)

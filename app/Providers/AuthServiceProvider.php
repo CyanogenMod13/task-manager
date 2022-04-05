@@ -28,9 +28,8 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::define('configure-project', function (User $user, int $project_id) {
-            $assignedUser = AssignedUser::where(['user_id' => $user->id, 'project_id' => $project_id])->first();
-            return $assignedUser->isAdmin();
+        Gate::define('configure-project', function (User $user, Project $project) {
+            return $project->getUserRole($user)->isAdmin();
         });
     }
 }

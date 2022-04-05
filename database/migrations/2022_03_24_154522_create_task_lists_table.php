@@ -32,7 +32,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->dropConstrainedForeignId('list_id');
+            $table->dropConstrainedForeignId('task_list_id');
         });
 
         Schema::dropIfExists('task_lists');

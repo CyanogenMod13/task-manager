@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\UserPermission;
 use App\Models\Role;
 use Illuminate\Database\Seeder;
 use ReflectionClass;
@@ -16,6 +15,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        //$admin = Role::create('')
+        $this->call(UserSeeder::class);
+        $this->call(ProjectSeeder::class);
     }
 }

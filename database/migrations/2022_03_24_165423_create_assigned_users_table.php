@@ -25,8 +25,6 @@ return new class extends Migration
                 ->on('users')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
-            $table->boolean('is_admin')
-                ->default(false);
         });
     }
 

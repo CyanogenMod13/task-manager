@@ -11,11 +11,6 @@ use Illuminate\Foundation\Http\FormRequest;
  */
 class ProjectAssignUserRequest extends FormRequest
 {
-    public function authorize()
-    {
-        return Gate::allows('configure-project', $this->route('project'));
-    }
-
     public function rules()
     {
         return [

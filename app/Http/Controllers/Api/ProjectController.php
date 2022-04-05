@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Project\ProjectRequest;
 use App\Models\Project;
+use App\Models\Role;
+use App\Models\User;
 use Gate;
 
 class ProjectController extends Controller
@@ -14,53 +16,41 @@ class ProjectController extends Controller
         return Project::all();
     }
 
-    public function get(int $projectId)
+    public function get(Project $project)
     {
-        $project = Project::with('lists.tasks')->find($projectId);
-        if (!$project) {
-            return response()->json(['massage' => 'Project not found'], 404);
-        }
         return $project;
     }
 
-    public function create(ProjectRequest $request)
+    public function create(ProjectRequest $request, User $user)
     {
-        $data = $request->validated();
-        $project = Project::create($data);
-        $project->assignUser(auth()->user()->id, true);
+        $project = Project::create($request->validated());
+        $project->assignUser($user, Role::where(['type' => Role::ADMIN_ROLE]));
         return $project;
     }
 
-    public function update(int $project_id, ProjectRequest $request)
+    /**
+     * @throws \Throwable
+     */
+    public function update(Project $project, ProjectRequest $request)
     {
-        if (!Gate::allows('configure-project', $project_id)) {
+        if (!Gate::allows('configure-project', $project)) {
             abort(403);
         }
-        $data = $request->validated();
-        $project = Project::find($project_id);
-        if ($project) {
-            if ($project->fill($data)->save()) {
-                return response()->json(['message' => 'Successfully']);
-            } else {
-                response()->json(['message' => 'Cannot change project'], 500);
-            }
+        if ($project->updateOrFail($request->validated())) {
+            return response()->json(['message' => 'Successfully']);
         }
-        return response()->json(['massage' => 'Project not found'], 404);
     }
 
-    public function delete(int $project_id)
+    /**
+     * @throws \Throwable
+     */
+    public function delete(Project $project)
     {
-        if (!Gate::allows('configure-project', $project_id)) {
+        if (!Gate::allows('configure-project', $project)) {
             abort(403);
         }
-        $project = Project::find($project_id);
-        if ($project) {
-            if ($project->delete()) {
-                return response()->json(['message' => 'Successfully']);
-            } else {
-                return response()->json(['message' => 'Cannot delete project'], 500);
-            }
+        if ($project->deleteOrFail()) {
+            return response()->json(['message' => 'Successfully']);
         }
-        return response()->json(['massage' => 'Project not found'], 404);
     }
 }

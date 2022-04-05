@@ -3,17 +3,28 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AssignedUser extends Model
 {
     public $timestamps = false;
 
     protected $fillable = [
-        'project_id', 'user_id', 'is_admin'
+        'project_id', 'user_id', 'role_id'
     ];
 
-    public function isAdmin(): bool
+    public function user(): BelongsTo
     {
-        return $this->is_admin;
+        return $this->belongsTo(User::class);
+    }
+
+    public function project(): BelongsTo
+    {
+        return $this->belongsTo(Project::class);
+    }
+
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class);
     }
 }
