@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property-read Role|null role
+ */
 class AssignedUser extends Model
 {
     public $timestamps = false;
@@ -12,6 +15,11 @@ class AssignedUser extends Model
     protected $fillable = [
         'project_id', 'user_id', 'role_id'
     ];
+
+    public function isAdmin()
+    {
+        return $this->role && $this->role->isAdmin();
+    }
 
     public function user(): BelongsTo
     {

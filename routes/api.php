@@ -26,8 +26,8 @@ Route::controller(AuthController::class)->group(function () {
 Route::middleware('auth:api')->group(function () {
     Route::prefix('/projects')->group(function () {
         Route::post('/create', [ProjectController::class, 'create']);
-        Route::get('/{project}', [ProjectController::class, 'get'])->whereNumber('project');
-        Route::get('/', [ProjectController::class, 'getAll']);
+        Route::get('/{project}', [ProjectController::class, 'show'])->whereNumber('project');
+        Route::get('/', [ProjectController::class, 'index']);
         Route::put('/{project}', [ProjectController::class, 'update'])->whereNumber('project');
         Route::delete('/{project}', [ProjectController::class, 'delete'])->whereNumber('project');
 

@@ -5,52 +5,48 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Project\ProjectRequest;
 use App\Models\Project;
-use App\Models\Role;
-use App\Models\User;
+use App\Repository\ProjectRepository;
+use App\Service\ProjectService;
+use Auth;
 use Gate;
 
 class ProjectController extends Controller
 {
-    public function getAll()
+    public function __construct(
+        private ProjectService $projectService,
+        private ProjectRepository $projectRepository
+    ) {}
+
+    public function index()
     {
-        return Project::all();
+        return ['projects' => $this->projectRepository->findAll()];
     }
 
-    public function get(Project $project)
+    public function show(Project $project)
     {
         return $project;
     }
 
-    public function create(ProjectRequest $request, User $user)
+    public function create(ProjectRequest $request)
     {
-        $project = Project::create($request->validated());
-        $project->assignUser($user, Role::where(['type' => Role::ADMIN_ROLE]));
-        return $project;
+        return $this->projectService->create($request, Auth::user());
     }
 
-    /**
-     * @throws \Throwable
-     */
     public function update(Project $project, ProjectRequest $request)
     {
         if (!Gate::allows('configure-project', $project)) {
             abort(403);
         }
-        if ($project->updateOrFail($request->validated())) {
-            return response()->json(['message' => 'Successfully']);
-        }
+        $this->projectService->rename($project, $request);
+        return response()->json(['message' => 'Successfully']);
     }
 
-    /**
-     * @throws \Throwable
-     */
     public function delete(Project $project)
     {
         if (!Gate::allows('configure-project', $project)) {
             abort(403);
         }
-        if ($project->deleteOrFail()) {
-            return response()->json(['message' => 'Successfully']);
-        }
+        $this->projectRepository->remove($project);
+        return response()->json(['message' => 'Successfully']);
     }
 }

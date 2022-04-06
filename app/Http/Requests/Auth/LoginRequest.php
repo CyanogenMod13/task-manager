@@ -1,20 +1,18 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * @property string name
  * @property string email
  * @property string password
  */
-class RegisterRequest extends FormRequest
+class LoginRequest extends FormRequest
 {
     public function rules()
     {
         return [
-            'name' => 'string|required',
             'email' => 'email|required',
             'password' => 'string|min:8|required'
         ];

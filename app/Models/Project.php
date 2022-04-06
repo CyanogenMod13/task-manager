@@ -21,32 +21,6 @@ class Project extends Model
         'name'
     ];
 
-    public function addList(string $name): void
-    {
-        $list = new TaskList();
-        $list->name = $name;
-        $list->save();
-    }
-
-    public function assignUser(User $user, Role $role): AssignedUser
-    {
-        return AssignedUser::where(['project_id' => $this->id, 'user_id' => $user->id])
-            ->updateOrCreate(['project_id' => $this->id, 'user_id' => $user->id, 'role_id' => $role->id]);
-    }
-
-    public function removeUser(User $user): bool
-    {
-        return AssignedUser::where(['project_id' => $this->id, 'user_id' => $user->id])->delete();
-    }
-
-    public function getUserRole(User $user): Role
-    {
-        return AssignedUser::where(['project_id' => $this->id, 'user_id' => $user->id])
-            ->with('role')
-            ->first()
-            ->role;
-    }
-
     public function lists(): HasMany
     {
         return $this->hasMany(TaskList::class);
