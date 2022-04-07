@@ -3,6 +3,8 @@
 use App\Http\Controllers\Api\AssignUserController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\ProjectController;
+use App\Http\Controllers\Api\TaskController;
+use App\Http\Controllers\Api\TaskListController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -33,5 +35,15 @@ Route::middleware('auth:api')->group(function () {
 
         Route::post('/{project}/assign/{user}/role/{role}', [AssignUserController::class, 'assignUser'])->whereNumber(['project', 'user', 'role']);
         Route::post('/{project}/remove/{user}', [AssignUserController::class, 'removeUser'])->whereNumber(['project', 'user']);
+
+        Route::post('/{project}/lists/create', [TaskListController::class, 'create']);
+        Route::put('/{project}/lists/{taskList}', [TaskListController::class, 'update']);
+        Route::delete('/{project}/lists/{taskList}', [TaskListController::class, 'delete']);
+    });
+
+    Route::prefix('/tasks')->group(function () {
+        Route::post('/create', [TaskController::class, 'create']);
+        Route::put('/{task}', [TaskController::class, 'update']);
+        Route::delete('/{task}', [TaskController::class, 'delete']);
     });
 });

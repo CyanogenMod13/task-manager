@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\AssignedUser;
 use App\Models\Project;
 use App\Models\User;
+use App\Policies\ProjectPolicy;
 use App\Repository\AssignedUserRepository;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
@@ -29,8 +30,6 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::define('configure-project', function (User $user, Project $project, AssignedUserRepository $repository) {
-            return $repository->findByProjectAndUser($project, $user)->isAdmin();
-        });
+        Gate::define('configure-project', [ProjectPolicy::class, 'configure']);
     }
 }

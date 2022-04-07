@@ -14,6 +14,10 @@ class Task extends Model
     public const PRIORITY_HIGH = 'high';
     public const PRIORITY_CRITICAL = 'critical';
 
+    protected $fillable = [
+        'name', 'description', 'start', 'end', 'priority', 'executor_id', 'task_list_id'
+    ];
+
     public function assignUser(User $user)
     {
         $this->executor_id = $user->id;
@@ -38,6 +42,11 @@ class Task extends Model
     public function list()
     {
         return $this->belongsTo(TaskList::class);
+    }
+
+    public function executor()
+    {
+        return $this->belongsTo(User::class);
     }
 }
 

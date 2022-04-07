@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Models\AssignedUser;
 use App\Models\Project;
+use App\Models\User;
 
 class ProjectRepository
 {
@@ -17,6 +19,20 @@ class ProjectRepository
     public function findAll(): array
     {
         return Project::all()->toArray();
+    }
+
+    /**
+     * @return Project[]
+     */
+    public function findByUser(User $user): array
+    {
+        return AssignedUser::where(['user_id' => $user->id])
+            ->with('project')
+            ->get()
+            ->map(function (AssignedUser $assignedUser) {
+                return $assignedUser->project;
+            })
+            ->toArray();
     }
 
     public function add(Project $project): void

@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Models\Project;
 use App\Models\TaskList;
 
 class TaskListRepository
@@ -17,6 +18,14 @@ class TaskListRepository
     public function findAll(): array
     {
         return TaskList::all()->toArray();
+    }
+
+    /**
+     * @return TaskList[]
+     */
+    public function findByProject(Project $project): array
+    {
+        return $project->lists()->get()->toArray();
     }
 
     public function add(TaskList $taskList): void

@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property-read Role|null role
+ * @property-read User|null user
+ * @property-read Project|null project
  */
 class AssignedUser extends Model
 {
