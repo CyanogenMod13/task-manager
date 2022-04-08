@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
+use App\Events\UserCreatedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
@@ -28,6 +29,7 @@ class AuthController extends Controller
         $user = new User($credentials);
         $user->password = bcrypt($credentials['password']);
         $user->save();
+        UserCreatedEvent::dispatch($user);
         $token = auth()->login($user);
         if (!$token)
             throw new AuthenticationException();
