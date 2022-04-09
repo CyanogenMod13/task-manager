@@ -14,6 +14,11 @@ class Task extends Model
     public const PRIORITY_HIGH = 'high';
     public const PRIORITY_CRITICAL = 'critical';
 
+    protected $casts = [
+        'end' => 'datetime:Y-m-d H:m',
+        'start' => 'datetime:Y-m-d H:m'
+    ];
+
     protected $fillable = [
         'name', 'description', 'start', 'end', 'priority', 'executor_id', 'task_list_id'
     ];
