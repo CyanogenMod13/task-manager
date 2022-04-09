@@ -44,8 +44,9 @@ class AuthController extends Controller
     private function sendToken(string $token)
     {
         return [
-            'token' => $token,
-            'type' => 'Bearer'
+            'access_token' => $token,
+            'type' => 'Bearer',
+            'expire_in' => auth()->factory()->getTTL() * 60
         ];
     }
 }
