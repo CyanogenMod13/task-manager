@@ -16,7 +16,7 @@ class TaskEstimateReminder extends Command
      *
      * @var string
      */
-    protected $signature = 'task:remind {task : ID of task}';
+    protected $signature = 'task:remind';
 
     /**
      * The console command description.
@@ -27,27 +27,22 @@ class TaskEstimateReminder extends Command
 
     public function handle(): int
     {
-        $task = Task::find($this->argument('task'));
-        if (!$task) {
-            $this->error('Task not found');
-            return -1;
-        }
-        if (!$task->end) {
-            $this->info('Task has no date of expire');
-            return 0;
-        }
-        if (!$task->executor_id) {
-            $this->info('Task has no executor');
-            return 0;
-        }
-
-        $end = Carbon::createFromTimeString($task->end);
-        $diff = now()->diffInDays($end);
-        if ($diff <= 1) {
-            $user = User::find($task->executor_id);
-            Mail::to($user)->queue(new TaskEstimateExpiredMail($task));
-            $this->info('Mail put in queue');
-        }
+        Task::with(['creator', 'executor'])
+            ->whereNotNull('creator_id')
+            ->whereDate('end', '<=', now()->addDay())
+            ->get()
+            ->whenEmpty(fn() => $this->info('Nothing to send'))
+            ->each(function (Task $task) {
+                $this->comment('Processing Task ID: ' . $task->id);
+                $users = [$task->creator];
+                if ($task->executor) {
+                    $users[] = $task->executor;
+                }
+                Mail::to($users)
+                    ->queue(new TaskEstimateExpiredMail($task));
+                //$this->info('Task processed');
+            });
+        $this->info('Done');
         return 0;
     }
 }
