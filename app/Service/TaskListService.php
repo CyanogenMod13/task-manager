@@ -13,11 +13,11 @@ class TaskListService
         private TaskListRepository $taskListRepository
     ) {}
 
-    public function create(TaskListRequest $request, Project $project): TaskList
+    public function create(TaskListRequest $request): TaskList
     {
         $taskList = new TaskList();
         $taskList->name = $request->name;
-        $taskList->project_id = $project->id;
+        $taskList->project_id = $request->project_id;
         $this->taskListRepository->add($taskList);
         return $taskList;
     }

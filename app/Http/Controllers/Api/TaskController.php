@@ -15,6 +15,11 @@ class TaskController extends Controller
         private TaskRepository $taskRepository
     ) {}
 
+    public function show(Task $task)
+    {
+        return $task;
+    }
+
     public function create(TaskRequest $request)
     {
         return $this->taskService->create($request);

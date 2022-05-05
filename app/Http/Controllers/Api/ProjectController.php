@@ -19,7 +19,12 @@ class ProjectController extends Controller
 
     public function index()
     {
-        return ['projects' => $this->projectRepository->findByUser(Auth::user())];
+        $projects = $this->projectRepository->findByUser(Auth::user());
+        $result = [];
+        foreach ($projects as $project) {
+            $result[] = ['id' => $project['id'], 'name' => $project['name']];
+        }
+        return ['projects' => $result];
     }
 
     public function show(Project $project)

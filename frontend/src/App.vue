@@ -1,13 +1,12 @@
 <script setup>
-import MainBoard from "./views/MainBoard.vue";
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap/dist/css/bootstrap-grid.css'
+import 'bootstrap/dist/js/bootstrap.bundle'
+import 'bootstrap-icons/font/bootstrap-icons.css'
+
+import MainView from "./views/MainView.vue";
 </script>
 
-<template class="h-100">
-    <header class="nav d-flex bg-black w-100">
-        <a class="nav-link text-white me-auto">Task Manager</a>
-        <a class="nav-link text-white">
-            <i class="bi bi-person-circle"></i>
-        </a>
-    </header>
-    <main-board/>
+<template class="d-flex flex-column h-100">
+    <main-view/>
 </template>

@@ -22,7 +22,7 @@ class TaskRequest extends FormRequest
             'description' => 'string',
             'start' => 'date',
             'end' => 'date',
-            'priority' => [Rule::in(['low', 'normal', 'high', 'critical'])],
+            'priority' => ['string', Rule::in(['low', 'normal', 'high', 'critical'])],
             'executor_id' => 'integer|exists:user',
             'name' => ['string'],
             'task_list_id' => ['integer', 'exists:task_lists,id']

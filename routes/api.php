@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Api\AssignUserController;
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\Api\Notifications\NotificationController;
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\TaskListController;
@@ -33,17 +35,32 @@ Route::middleware('auth:api')->group(function () {
         Route::put('/{project}', [ProjectController::class, 'update'])->whereNumber('project');
         Route::delete('/{project}', [ProjectController::class, 'delete'])->whereNumber('project');
 
-        Route::post('/{project}/assign/{user}/role/{role}', [AssignUserController::class, 'assignUser'])->whereNumber(['project', 'user', 'role']);
-        Route::post('/{project}/remove/{user}', [AssignUserController::class, 'removeUser'])->whereNumber(['project', 'user']);
+        Route::post('/{project}/assign-user/{user}/role/{role}', [AssignUserController::class, 'assignUser'])->whereNumber(['project', 'user', 'role']);
+        Route::post('/{project}/remove-user/{user}', [AssignUserController::class, 'removeUser'])->whereNumber(['project', 'user']);
+    });
 
-        Route::post('/{project}/lists/create', [TaskListController::class, 'create']);
-        Route::put('/{project}/lists/{taskList}', [TaskListController::class, 'update']);
-        Route::delete('/{project}/lists/{taskList}', [TaskListController::class, 'delete']);
+    Route::prefix('/task-lists')->group(function () {
+        Route::get('/{taskList}', [TaskListController::class, 'show']);
+        Route::post('/create', [TaskListController::class, 'create']);
+        Route::put('/{taskList}', [TaskListController::class, 'update']);
+        Route::delete('/{taskList}', [TaskListController::class, 'delete']);
     });
 
     Route::prefix('/tasks')->group(function () {
+        Route::get('/{task}', [TaskController::class, 'show']);
         Route::post('/create', [TaskController::class, 'create']);
         Route::put('/{task}', [TaskController::class, 'update']);
         Route::delete('/{task}', [TaskController::class, 'delete']);
+    });
+
+    Route::prefix('/notifications')->group(function() {
+        Route::get('/', [NotificationController::class, 'index']);
+        Route::post('/mark-as-read/{notification}', [NotificationController::class, 'markAsRead']);
+    });
+
+    Route::prefix('/comments')->group(function () {
+        Route::get('/{task}', [CommentController::class, 'index']);
+        Route::post('/{task}/publish', [CommentController::class, 'publish']);
+        Route::delete('/{comment}', [CommentController::class, 'delete']);
     });
 });

@@ -16,9 +16,14 @@ class TaskListController extends Controller
         private TaskListService $taskListService
     ) {}
 
-    public function create(Project $project, TaskListRequest $request)
+    public function show(TaskList $taskList)
     {
-        return $this->taskListService->create($request, $project);
+        return $taskList;
+    }
+
+    public function create(TaskListRequest $request)
+    {
+        return $this->taskListService->create($request);
     }
 
     public function delete(TaskList $taskList)

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\AssignedUser;
+use App\Models\Comment;
 use App\Models\Project;
 use App\Models\User;
 use App\Policies\ProjectPolicy;
@@ -31,5 +32,8 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Gate::define('configure-project', [ProjectPolicy::class, 'configure']);
+        Gate::define('delete-comment', function (Comment $comment, User $user) {
+            return $comment->user_id === $user->id;
+        });
     }
 }
